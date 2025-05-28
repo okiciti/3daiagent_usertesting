@@ -1,0 +1,270 @@
+{
+  "44": {
+    "inputs": {
+      "ckpt_name": "cardosAnime_v20.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "45": {
+    "inputs": {
+      "vae_name": "vae-ft-mse-840000-ema-pruned.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "46": {
+    "inputs": {
+      "ipadapter_file": "ip-adapter-plus_sd15.safetensors"
+    },
+    "class_type": "IPAdapterModelLoader",
+    "_meta": {
+      "title": "IPAdapter Model Loader"
+    }
+  },
+  "47": {
+    "inputs": {
+      "clip_name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "49": {
+    "inputs": {
+      "image": null
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "50": {
+    "inputs": {
+      "text": "A highly detailed and artistic 3D model created in Blender, featuring a fusion of geometric and organic shapes. Smooth cubes and cylindrical elements are seamlessly merged with fluid, amorphous structures, creating a dynamic interplay of hard edges and flowing forms. The design emphasizes abstraction and avoids any semblance of human-like shapes or recognizable objects. The composition is balanced, with negative space and interlocking shapes that suggest complexity and intrigue. The overall aesthetic is sculptural, with a focus on form and texture, designed to appear as if generated entirely in Blender. The rendering is clean, with soft lighting highlighting the contrasts between geometric precision and organic fluidity.",
+      "clip": [
+        "44",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "51": {
+    "inputs": {
+      "text": "Avoid any human-like shapes, faces, or body parts. Exclude sharp spikes, excessive symmetry, and overly mechanical appearances. Avoid using realistic textures or materials that might resemble stone or metal. No baseplates, pedestals, or supporting frames. Keep the composition purely abstract and artistic",
+      "clip": [
+        "44",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "52": {
+    "inputs": {
+      "seed": 111525443031905,
+      "steps": 25,
+      "cfg": 6,
+      "sampler_name": "ddim",
+      "scheduler": "ddim_uniform",
+      "denoise": 1,
+      "model": [
+        "65",
+        0
+      ],
+      "positive": [
+        "50",
+        0
+      ],
+      "negative": [
+        "51",
+        0
+      ],
+      "latent_image": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "53": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 4
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "54": {
+    "inputs": {
+      "samples": [
+        "52",
+        0
+      ],
+      "vae": [
+        "44",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "55": {
+    "inputs": {
+      "filename_prefix": "IPAdapter",
+      "images": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "61": {
+    "inputs": {
+      "interpolation": "LANCZOS",
+      "crop_position": "top",
+      "sharpening": 0,
+      "image": [
+        "49",
+        0
+      ]
+    },
+    "class_type": "PrepImageForClipVision",
+    "_meta": {
+      "title": "Prep Image For ClipVision"
+    }
+  },
+  "62": {
+    "inputs": {
+      "image": null
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "63": {
+    "inputs": {
+      "interpolation": "LANCZOS",
+      "crop_position": "top",
+      "sharpening": 0,
+      "image": [
+        "62",
+        0
+      ]
+    },
+    "class_type": "PrepImageForClipVision",
+    "_meta": {
+      "title": "Prep Image For ClipVision"
+    }
+  },
+  "65": {
+    "inputs": {
+      "weight": 1,
+      "weight_type": "linear",
+      "start_at": 0,
+      "end_at": 1,
+      "embeds_scaling": "V only",
+      "model": [
+        "44",
+        0
+      ],
+      "ipadapter": [
+        "46",
+        0
+      ],
+      "pos_embed": [
+        "68",
+        0
+      ],
+      "clip_vision": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "IPAdapterEmbeds",
+    "_meta": {
+      "title": "IPAdapter Embeds"
+    }
+  },
+  "66": {
+    "inputs": {
+      "weight": 1,
+      "ipadapter": [
+        "46",
+        0
+      ],
+      "image": [
+        "61",
+        0
+      ],
+      "clip_vision": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "IPAdapterEncoder",
+    "_meta": {
+      "title": "IPAdapter Encoder"
+    }
+  },
+  "67": {
+    "inputs": {
+      "weight": 1,
+      "ipadapter": [
+        "46",
+        0
+      ],
+      "image": [
+        "63",
+        0
+      ],
+      "clip_vision": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "IPAdapterEncoder",
+    "_meta": {
+      "title": "IPAdapter Encoder"
+    }
+  },
+  "68": {
+    "inputs": {
+      "method": "concat",
+      "embed1": [
+        "66",
+        0
+      ],
+      "embed2": [
+        "67",
+        0
+      ]
+    },
+    "class_type": "IPAdapterCombineEmbeds",
+    "_meta": {
+      "title": "IPAdapter Combine Embeds"
+    }
+  }
+}
